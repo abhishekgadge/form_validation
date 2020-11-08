@@ -1,104 +1,48 @@
-$(document).ready(function (){
-    
-    var Validation = (function (){
-        var emailReg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        var digitReg = /^\d+$/;
-        
-        var isEmail = function (email){
-            return emailReg.test(email);
-        };
-        var isNumber = function (value){
-            return digitReg.test(value);
-        };
-        var isRequire = function (value){
-            return value == "";
-        };
-        var countChars = function (value, count){
-            return value.length == count;
-        };
-        var isChecked = function (el){
-            var hasCheck = false;
-            el.each(function (){
-                if($(this).prop('checked')){
-                    hasCheck = true;
-                }
-            });
-            return hasCheck;
-        };
-        return {
-            isEmail : isEmail,
-            isNumber : isNumber,
-            isRequire: isRequire,
-            countChars: countChars,
-            isChecked: isChecked
-        };
-    })();
-    
-    var required = $('form').find('[data-required]');
-    var numbers = $('form').find('[data-number]');
-    var emails = $('form').find('[data-email]');
-    var once = $('form').find('[data-once]');
-    var radios = $('.form-item-triple');
-    var groups = [];
-    radios.each(function (){
-        groups.push($(this).find('[data-once]'));
-    });
-    var counts = $('form').find('[data-count]');
-    
-    $('#submit').on('click', function (){
-        required.each(function (){
-            if(Validation.isRequire($(this).val())){
-                $(this).siblings('small.errorReq').show();
-            }
-        });
-        emails.each(function (){
-            if(!Validation.isEmail($(this).val())){
-                $(this).siblings('small.errorEmail').show();
-            }
-        });
-        $.each(groups, function (){
-            if(!Validation.isChecked($(this))){
-                $(this).parents('.form-item').find('small.errorOnce').show();
-            }
-        });
-        numbers.each(function (){
-            if(!Validation.isNumber($(this).val())){
-                $(this).siblings('small.errorNum').show();
-            }
-        });
-        counts.each(function (){
-            if(!Validation.countChars($(this).val(), $(this).data('count'))){
-                $(this).siblings('small.errorChar').show();
-            }
-        });
-    });
-    
-    required.on('keyup blur', function (){
-        if(!Validation.isRequire($(this).val())){
-            $(this).siblings('small.errorReq').hide();
-        }
-    });
-    emails.on('keyup blur', function (){
-        if(Validation.isEmail($(this).val())){
-            $(this).siblings('small.errorEmail').hide();
-        }
-    });
-    once.on('change', function (){
-        $.each(groups, function (i){
-            if(Validation.isChecked(groups[i])){
-                groups[i].parents('.form-item').find('small.errorOnce').hide();
-            }
-        });
-    });
-    numbers.on('keyup blur', function (){
-        if(Validation.isNumber($(this).val())){
-            $(this).siblings('small.errorNum').hide();
-        }
-    });
-    counts.on('keyup blur', function (){
-         if(Validation.countChars($(this).val(), $(this).data('count'))){
-            $(this).siblings('small.errorChar').hide();
-        }
-    });
-    
-});
+<script type="text/javascript">
+var ck_name = /^[A-Za-z0-9 ]{3,20}$/;
+var ck_email = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]
+{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i 
+var ck_username = /^[A-Za-z0-9_]{1,20}$/;
+var ck_password =  /^[A-Za-z0-9!@#$%^&*()_]{6,20}$/;
+
+function validate(form){
+var name = form.name.value;
+var email = form.email.value;
+var username = form.username.value;
+var password = form.password.value;
+var gender = form.gender.value;
+var errors = [];
+ 
+ if (!ck_name.test(name)) {
+  errors[errors.length] = "You valid Name .";
+ }
+ if (!ck_email.test(email)) {
+  errors[errors.length] = "You must enter a valid email 
+address.";
+ }
+ if (!ck_username.test(username)) {
+  errors[errors.length] = "You valid UserName no special 
+char .";
+ }
+ if (!ck_password.test(password)) {
+  errors[errors.length] = "You must enter a valid Password ";
+ }
+ if (gender==0) {
+  errors[errors.length] = "Select Gender";
+ }
+ if (errors.length > 0) {
+
+  reportErrors(errors);
+  return false;
+ }
+  return true;
+}
+function reportErrors(errors){
+ var msg = "Please Enter Valide Data...\n";
+ for (var i = 0; i<errors.length; i++) {
+ var numError = i + 1;
+  msg += "\n" + numError + ". " + errors[i];
+}
+ alert(msg);
+}
+</script>
